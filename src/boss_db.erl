@@ -66,7 +66,7 @@ stop() ->
 
 %% Application callbacks
 start(_StartType, _StartArgs) ->
-    start(application:get_all_env()).
+    start(application:get_all_env(boss_db)).
 
 stop(_State) ->
     ok.
