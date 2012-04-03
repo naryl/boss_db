@@ -58,7 +58,6 @@ start(Options) ->
                         Acc
                 end
         end, [], proplists:get_value(shards, Options, [])),
-    boss_news:start(),
     boss_db_sup:start_link(Options).
 
 stop() ->
