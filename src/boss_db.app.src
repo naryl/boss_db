@@ -14,5 +14,6 @@
         stdlib,
         crypto
             ]},
+	{mod, {boss_db, []}},
     {env, []}
     ]}.

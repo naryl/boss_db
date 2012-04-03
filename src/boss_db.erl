@@ -1,8 +1,9 @@
 %% @doc Chicago Boss database abstraction
 
 -module(boss_db).
+-behaviour(application).
 
--export([start/0, start/1, stop/0]).
+-export([start/0, stop/0]).
 
 -export([start/2, stop/1]).
 
@@ -58,6 +59,7 @@ start(Options) ->
                         Acc
                 end
         end, [], proplists:get_value(shards, Options, [])),
+    boss_news:start(),
     boss_db_sup:start_link(Options).
 
 stop() ->
