@@ -2,7 +2,9 @@
 
 -module(boss_db).
 
--export([start/1, stop/0]).
+-export([start/0, start/1, stop/0]).
+
+-export([start/2, stop/1]).
 
 -export([
         find/1, 
@@ -36,6 +38,10 @@
 -define(DEFAULT_TIMEOUT, (30 * 1000)).
 -define(POOLNAME, boss_db_pool).
 
+start() ->
+    application:start(crypto),
+    application:start(boss_db).
+
 start(Options) ->
     AdapterName = proplists:get_value(adapter, Options, mock),
     Adapter = list_to_atom(lists:concat(["boss_db_adapter_", AdapterName])),
@@ -52,9 +58,17 @@ start(Options) ->
                         Acc
                 end
         end, [], proplists:get_value(shards, Options, [])),
+    boss_news:start(),
     boss_db_sup:start_link(Options).
 
 stop() ->
+    ok.
+
+%% Application callbacks
+start(_StartType, _StartArgs) ->
+    start(application:get_all_env()).
+
+stop(_State) ->
     ok.
 
 db_call(Msg) ->
