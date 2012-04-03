@@ -315,16 +315,10 @@ attr_value(AttrName, MongoDoc) ->
     proplists:get_value(AttrName, MongoDoc).
 
 % Id conversions
+pack_id("") -> "";
 pack_id(BossId) ->
-    try
-        [_, MongoId] = string:tokens(BossId, "-"),
-        {hex2dec(MongoId)}
-    catch
-        Error:Reason -> 
-            error_logger:warning_msg("Error parsing Boss record id: ~p:~p~n", 
-                [Error, Reason]),
-            []
-    end.
+    [_, MongoId] = string:tokens(BossId, "-"),
+    {hex2dec(MongoId)}.
 
 unpack_id(Type, MongoId) ->
     lists:concat([Type, "-", binary_to_list(dec2hex(element(1, MongoId)))]).
